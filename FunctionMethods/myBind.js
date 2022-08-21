@@ -1,3 +1,1 @@
-Function.prototype.myBind = function (context) {
-
-}
+Function.prototype.myBind = function (context) {};
