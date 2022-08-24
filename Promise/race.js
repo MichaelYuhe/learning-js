@@ -1,7 +1,7 @@
 Promise.myRace = function (promises) {
   return new Promise((resolve, reject) => {
-    promises.forEach((item) => {
-      Promise.resolve(item)
+    promises.forEach((promise) => {
+      Promise.resolve(promise)
         .then((res) => {
           resolve(res);
         })
