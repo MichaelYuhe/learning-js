@@ -37,7 +37,7 @@ function MyPromise(fn) {
   }
 }
 
-MyPromise.prototype.then = function (onFulfilled, onRejected) {
+MyPromise.then = function (onFulfilled, onRejected) {
   const that = this;
 
   if (this.status === FULFILLED) {
