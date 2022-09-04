@@ -2,48 +2,47 @@ const PENDING = "pending";
 const FULFILLED = "fulfilled";
 const REJECTED = "rejected";
 
-function MyPromise(fn) {
-  this.state = PENDING;
-  this.value = null;
-  this.reason = null;
+class MyPromise {
+  constructor(executor) {
+    this.status = PENDING;
+    this.value = undefined;
+    this.reason = undefined;
 
-  this.fulfilledCallbacks = [];
-  this.rejectedCallbacks = [];
+    executor(this.resolve, this.reject);
+  }
 
-  const that = this;
-
-  function resolve(value) {
-    if (that.state === PENDING) {
-      that.state = FULFILLED;
-      that.value = value;
-
-      that.fulfilledCallbacks.map((cb) => cb(that.value));
+  resolve = (value) => {
+    if (this.status === PENDING) {
+      this.status = FULFILLED;
+      this.value = value;
     }
-  }
+  };
 
-  function reject(reason) {
-    if (that.state === PENDING) {
-      that.state = REJECTED;
-      that.reason = reason;
-
-      that.rejectedCallbacks.map((cb) => cb(that.reason));
+  reject = (reason) => {
+    if (this.status === PENDING) {
+      this.status = REJECTED;
+      this.reason = reason;
     }
-  }
 
-  try {
-    fn(resolve, reject);
-  } catch (err) {
-    reject(err);
-  }
+    then(onResolved, onRejected) {
+      if (this.status === FULFILLED) {
+        onResolved(this.value);
+      } else if (this.status === REJECTED) {
+        onRejected(this.reason);
+      }
+    };
+  };
 }
 
-MyPromise.then = function (onFulfilled, onRejected) {
-  const that = this;
+const promise = new MyPromise((resolve, reject) => {
+  resolve(100);
+  reject("Err");
+});
 
-  if (this.status === FULFILLED) {
-    const newPromise = new MyPromise(function (resolve, reject) {
-      setTimeout(() => {}, 0);
-    });
-    onFulfilled(this.value);
-  }
-};
+promise
+  .then((value) => {
+    console.log(value);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
