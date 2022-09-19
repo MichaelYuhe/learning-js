@@ -28,5 +28,3 @@ const unique3 = (arr) => {
   }
   return res;
 };
-
-// 双循环去重
